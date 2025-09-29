@@ -2,7 +2,7 @@ package es.iesjandula.instituto.models;
 
 public class Asignatura
 {
-	private String identificar;
+	private String idAsignatura;
 	private String nombre;
 	private int numeroCreditos;
 	private int horas;
@@ -12,14 +12,14 @@ public class Asignatura
 		
 	}
 
-	public String getIdentificar()
+	public String getIdAsignatura()
 	{
-		return identificar;
+		return idAsignatura;
 	}
 
-	public void setIdentificar(String identificar)
+	public void setIdAsignatura(String idAsignatura)
 	{
-		this.identificar = identificar;
+		this.idAsignatura = idAsignatura;
 	}
 
 	public String getNombre()

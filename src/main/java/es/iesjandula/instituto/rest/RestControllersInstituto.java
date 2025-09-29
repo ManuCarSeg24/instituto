@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.iesjandula.instituto.models.Alumno;
 import es.iesjandula.instituto.models.Asignatura;
+import es.iesjandula.instituto.models.Matricula;
 import es.iesjandula.instituto.utils.MiExcepcion;
 import jakarta.annotation.PostConstruct;
-
-
-
 
 
 @RestController
@@ -25,12 +23,17 @@ public class RestControllersInstituto
 {
 	private List<Alumno> alumnos;
 	private List<Asignatura> asignaturas;
+	private List<Matricula> matriculas;
+	{
+		
+	}
 	
 	@PostConstruct
 	public void init() 
 	{
 		this.alumnos = new ArrayList<Alumno>();
 		this.asignaturas = new ArrayList<Asignatura>();
+		this.matriculas = new ArrayList<Matricula>();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/", consumes = "application/json")
@@ -92,7 +95,7 @@ public class RestControllersInstituto
 			{
 				Asignatura asignatura = this.asignaturas.get(i);
 
-				if (asignatura.getIdentificar() == identificador)
+				if (asignatura.getIdAsignatura() == identificador)
 				{
 					indiceEncontrado = i;
 				}
@@ -172,7 +175,7 @@ public class RestControllersInstituto
 			{
 				Alumno alumno = this.alumnos.get(i);
 
-				if (alumno.getDNI() == DNI)
+				if (alumno.getDni() == DNI)
 				{
 					indiceEncontrado = i;
 				}
@@ -194,11 +197,24 @@ public class RestControllersInstituto
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	@RequestMapping(method = RequestMethod.POST, value="/", consumes = "application/json")
+	public ResponseEntity<?> crearMatricula(@RequestBody(required=true)Matricula matricula)
+	{
+		try
+		{
+			if (this.matriculas.contains(matricula))
+			{
+				throw new MiExcepcion("Ya existe esta matrícula.");
+			}
+
+			matriculas.add(matricula);
+
+			return ResponseEntity.ok().build();
+
+		} 
+		catch (MiExcepcion miExcepcion)
+		{
+			return ResponseEntity.badRequest().body(miExcepcion.getMessage());
+		}
+	}
 }
