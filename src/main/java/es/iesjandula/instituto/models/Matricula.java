@@ -6,12 +6,16 @@ public class Matricula
 {
 	private String dniAlumno;
 	private String idAsignatura;
-	/**
-	 * 
-	 */
+	
 	public Matricula()
 	{
 		
+	}
+
+	public Matricula(Alumno alumno, Asignatura asignatura)
+	{
+		this.dniAlumno = alumno.getDniAlumno();
+		this.idAsignatura = asignatura.getIdAsignatura();
 	}
 	/**
 	 * @return the dniAlumno
@@ -57,6 +61,6 @@ public class Matricula
 			return false;
 		Matricula matricula = (Matricula) objetc;
 		
-		return this.dniAlumno == matricula.dniAlumno && this.idAsignatura == matricula.idAsignatura;
+		return this.dniAlumno.equals(matricula.dniAlumno)  && this.idAsignatura.equals(matricula.idAsignatura);
 	}
 }

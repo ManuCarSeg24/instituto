@@ -2,7 +2,7 @@ package es.iesjandula.instituto.models;
 
 public class Alumno
 {
-	private String dni;
+	private String dniAlumno;
 	private String nombre;
 	private String apellidos;
 	private String correo;
@@ -14,15 +14,18 @@ public class Alumno
 		
 	}
 	
-	public String getDni()
+	public String getDniAlumno()
 	{
-		return dni;
+		return dniAlumno;
 	}
 
-	public void setDNI(String dNI)
+	
+	public void setDniAlumno(String dniAlumno)
 	{
-		dni = dNI;
+		this.dniAlumno = dniAlumno;
 	}
+
+
 
 	public String getNombre()
 	{
@@ -63,5 +66,4 @@ public class Alumno
 	{
 		this.telefono = telefono;
 	}
-	
 }

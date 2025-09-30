@@ -36,7 +36,7 @@ public class RestControllersInstituto
 		this.matriculas = new ArrayList<Matricula>();
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value="/", consumes = "application/json")
+	@RequestMapping(method = RequestMethod.POST, value="/crearAsignatura", consumes = "application/json")
 	public ResponseEntity<?> crearAsignatura(@RequestBody(required=true)Asignatura asignatura)
 	{
 		try
@@ -58,7 +58,7 @@ public class RestControllersInstituto
 		}
 		
 	}
-	@RequestMapping(value = "/", method = RequestMethod.PUT, consumes = "application/json")
+	@RequestMapping(value = "/modificarAsignatura", method = RequestMethod.PUT, consumes = "application/json")
 	public ResponseEntity<?> modificarAsignatura(@RequestBody(required = true) Asignatura asignatura)
 	{
 		try
@@ -83,7 +83,7 @@ public class RestControllersInstituto
 			return ResponseEntity.badRequest().body(miExcepcion.getMessage());
 		}
 	}
-	@RequestMapping(value = "/{identificador}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/borrarAsignatura/{identificador}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> borrarAsignatura(@PathVariable("identificador") String identificador)
 	{
 		try
@@ -116,7 +116,7 @@ public class RestControllersInstituto
 			return ResponseEntity.badRequest().body(miExcepcion.getMessage());
 		}
 	}
-	@RequestMapping(method = RequestMethod.POST, value="/", consumes = "application/json")
+	@RequestMapping(method = RequestMethod.POST, value="/crearAlumno", consumes = "application/json")
 	public ResponseEntity<?> crearAlumno(@RequestBody(required=true)Alumno alumno)
 	{
 		try
@@ -138,7 +138,7 @@ public class RestControllersInstituto
 		}
 		
 	}
-	@RequestMapping(value = "/", method = RequestMethod.PUT, consumes = "application/json")
+	@RequestMapping(value = "/modificarAlumno", method = RequestMethod.PUT, consumes = "application/json")
 	public ResponseEntity<?> modificarAlumno(@RequestBody(required = true) Alumno alumno)
 	{
 		try
@@ -163,7 +163,7 @@ public class RestControllersInstituto
 			return ResponseEntity.badRequest().body(miExcepcion.getMessage());
 		}
 	}
-	@RequestMapping(value = "/{dni}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/borrarAlumno/{dni}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> borrarAlumno(@PathVariable("identificador") String DNI)
 	{
 		try
@@ -175,7 +175,7 @@ public class RestControllersInstituto
 			{
 				Alumno alumno = this.alumnos.get(i);
 
-				if (alumno.getDni() == DNI)
+				if (alumno.getDniAlumno() == DNI)
 				{
 					indiceEncontrado = i;
 				}
@@ -197,18 +197,20 @@ public class RestControllersInstituto
 		}
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value="/", consumes = "application/json")
+	@RequestMapping(method = RequestMethod.POST, value="/crearMatricula", consumes = "application/json")
 	public ResponseEntity<?> crearMatricula(@RequestBody(required=true)Matricula matricula)
 	{
 		try
 		{
-			if (this.matriculas.contains(matricula))
+			int indiceAlumno = this.buscarAlumno(matricula.getDniAlumno());
+			int indiceAsignatura = this.buscarAsignatura(matricula.getIdAsignatura());
+			
+			if(this.matriculas.contains(matricula))
 			{
-				throw new MiExcepcion("Ya existe esta matrícula.");
+				throw new MiExcepcion("Ya exite la matricula.");
 			}
-
-			matriculas.add(matricula);
-
+			
+			this.matriculas.add(new Matricula(this.alumnos.get(indiceAlumno), this.asignaturas.get(indiceAsignatura)));
 			return ResponseEntity.ok().build();
 
 		} 
@@ -217,4 +219,55 @@ public class RestControllersInstituto
 			return ResponseEntity.badRequest().body(miExcepcion.getMessage());
 		}
 	}
+	
+	@RequestMapping(value = "/matricula", method = RequestMethod.GET)
+	public ResponseEntity<?> listaMatricula()
+	{
+		return ResponseEntity.ok(this.matriculas);
+	}
+
+	private int buscarAsignatura(String idAsignatura) throws MiExcepcion
+	{
+		int asignaturaEncontrada = -1;
+		int indiceAsignatura = 0;
+		
+		while (indiceAsignatura < this.asignaturas.size() && asignaturaEncontrada == -1)
+		{
+			Asignatura asignatura = this.asignaturas.get(indiceAsignatura);
+			
+			if(asignatura.getIdAsignatura().equals(idAsignatura))
+			{
+				asignaturaEncontrada = indiceAsignatura;
+			}
+			indiceAsignatura++;
+		}
+		if (asignaturaEncontrada == -1)
+		{
+		    throw new MiExcepcion("La asignatura con ID " + idAsignatura + " no existe.");
+		}
+		return asignaturaEncontrada;
+	}
+
+	private int buscarAlumno(String dniAlumno) throws MiExcepcion
+	{
+		int alumnoEncontrado = -1;
+		int indiceAlumno = 0;
+		
+		while (indiceAlumno < this.alumnos.size() && alumnoEncontrado == -1)
+		{
+			Alumno alumno = this.alumnos.get(indiceAlumno);
+			
+			if(alumno.getDniAlumno().equals(dniAlumno))
+			{
+				alumnoEncontrado = indiceAlumno;
+			}
+			indiceAlumno++;
+		}
+		if (alumnoEncontrado == -1)
+		{
+		    throw new MiExcepcion("El alumno con DNI " + dniAlumno + " no existe.");
+		}
+		return alumnoEncontrado;
+	}
+	
 }
