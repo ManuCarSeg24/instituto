@@ -51,4 +51,18 @@ public class Asignatura
 	{
 		this.horas = horas;
 	}
+	
+	@Override
+	public boolean equals(Object objetc)
+	{
+		if (this == objetc)
+			return true;
+		if (objetc == null)
+			return false;
+		if (!(objetc instanceof Asignatura))
+			return false;
+		Asignatura asignatura = (Asignatura) objetc;
+		
+		return this.idAsignatura.equals(asignatura.idAsignatura);
+	}
 }

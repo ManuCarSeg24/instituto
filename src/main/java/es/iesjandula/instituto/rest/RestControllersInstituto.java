@@ -123,7 +123,7 @@ public class RestControllersInstituto
 		{
 			if (this.alumnos.contains(alumno))
 			{
-				throw new MiExcepcion("Esta asignatura ya existe");
+				throw new MiExcepcion("Esta alumno ya existe.");
 			}
 		
 			alumnos.add(alumno);

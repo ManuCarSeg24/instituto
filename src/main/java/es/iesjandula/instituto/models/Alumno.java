@@ -66,4 +66,18 @@ public class Alumno
 	{
 		this.telefono = telefono;
 	}
+	
+	@Override
+	public boolean equals(Object objetc)
+	{
+		if (this == objetc)
+			return true;
+		if (objetc == null)
+			return false;
+		if (!(objetc instanceof Alumno))
+			return false;
+		Alumno alumno = (Alumno) objetc;
+		
+		return this.dniAlumno.equals(alumno.dniAlumno);
+	}
 }
